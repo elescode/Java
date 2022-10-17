@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Program2 {
 
-    public static java.util.Scanner Key = new java.util.Scanner(System.in);
+    public static Scanner scanner = new Scanner(System.in);
     public static char key;
     public static double n;
     public static Conus conus = new Conus(0, 0);
@@ -16,7 +16,7 @@ public class Program2 {
         System.out.println("c - посмотреть состояние конуса;");
         System.out.println("d - выйти из программы...");
         char key;
-        key = Key.next().toLowerCase().charAt(0);
+        key = scanner.next().toLowerCase().charAt(0);
         return key;
     }
 
@@ -31,8 +31,8 @@ public class Program2 {
     public static double inputData() {
         do {
             System.out.print("Введите значение: ");
-            if (Key.hasNextDouble()) {
-                n = Key.nextDouble();
+            if (scanner.hasNextDouble()) {
+                n = scanner.nextDouble();
                 if (!checkData()) {
                     System.out.println("Значение может быть только положительным числом! Попробуйте снова...");
                     System.out.println();
@@ -42,7 +42,7 @@ public class Program2 {
             } else {
                 System.out.println("Ввод неверный... Попробуйте снова...");
                 System.out.println();
-                Key.next();
+                scanner.next();
             }
         } while (true);
     }
@@ -55,7 +55,7 @@ public class Program2 {
         conus.setH(inputData());
     }
 
-    public static char doSmthngMenu() {
+    public static char doSolveMenu() {
         System.out.println();
         System.out.println("Выберите действие:");
         System.out.println("a - найти объём конуса;");
@@ -66,11 +66,11 @@ public class Program2 {
         System.out.println("f - проверить вложен ли другой конус в этот;");
         System.out.println("g - вернуться...");
         char key;
-        key = Key.next().toLowerCase().charAt(0);
+        key = scanner.next().toLowerCase().charAt(0);
         return key;
     }
 
-    public static void doSmthng() {
+    public static void solveTask() {
         if (conus.getR() == 0 || conus.getH() == 0) {
             System.out.println("Данные отсутствуют...");
         } else {
@@ -78,7 +78,7 @@ public class Program2 {
             boolean program = true;
 
             do {
-                char set = doSmthngMenu();
+                char set = doSolveMenu();
                 switch (set) {
                     case 'a':
                         System.out.println("Объём конуса: " + conus.volume());
@@ -102,7 +102,16 @@ public class Program2 {
                         System.out.println("Площадь сечения конуса на высоте " + n + " : " + conus.crossArea(n));
                         break;
                     case 'f':
-                        conus.inside(conus);
+                        System.out.println("Введите высоту второго конуса.");
+                        double height = inputData();
+                        System.out.println("Введите радиус основания второго конуса.");
+                        double radius = inputData();
+                        switch(conus.insideConus(radius, height)){
+                            case 1: System.out.println("Ваш второй конус не вложен в первый."); break;
+                            case 2: System.out.println("Ваш второй конус имеет такие же характеристики, как и первый."); break;
+                            case 3: System.out.println("Ваш второй конус вложен в первый."); break;
+                            default: System.out.println("Ошибка при выполнении..."); break;
+                        } 
                         break;
                     case 'g':
                         program = false;
@@ -139,7 +148,7 @@ public class Program2 {
                     createObject();
                     break;
                 case 'b':
-                    doSmthng();
+                    solveTask();
                     break;
                 case 'c':
                     checkState();
